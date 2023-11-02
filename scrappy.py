@@ -1,6 +1,6 @@
 import requests as rq
 import bs4 as bs4
-
+import random
 
 class Product:
     def __init__(self,product_name):
@@ -8,38 +8,116 @@ class Product:
         
     
     def amazon_url(self):
-        base_url = "https://www.amazon.in/s?k="
+        base_url = f"https://www.amazon.in/s?k={self.product_name}"
         
-        return base_url + self.product_name
+        return base_url
     
     def flipkart_url(self):
-        base_url = "https://www.flipkart.com/search?q="
+        base_url = f"https://www.flipkart.com/search?q={self.product_name}&marketplace=FLIPKART"
         
-        return base_url + self.product_name
-    
-    def myntra_url(self):
-        base_url = "https://www.myntra.com/"
-        
-        return base_url + self.product_name
-    
+        return base_url
     
     def product_urls(self):
-        urls = {"amazon": self.amazon_url(),"flipkart" : self.flipkart_url(),"myntra" : self.myntra_url()}
+        urls = {"amazon": self.amazon_url(),"flipkart" : self.flipkart_url()}
         
         return urls
 
 
 class Request:
     
-    def __init__(self):
-        self.custom_headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0'}
+    def __init__(self,Product):
+        
+        self.custom_headers_list = [{'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"},
+                                    {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"},
+                                    {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"},
+                                    {'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G570Y Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/4.0 Chrome/44.0.2403.133 Mobile Safari/537.36',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"}
+                                    ]
         self.urls = Product.product_urls()
+        self.htmls = self.get_htmls()
     
     def make_request(self):
-        pass
+        stat_codes = {}
+        resp = {}
+        
+        for url in self.urls:
+            req = rq.get(self.urls[url],headers = self.custom_headers_list[random.randint(0,3)])
+            resp[url] = req.content
+            stat_codes[url] = req.status_code
+        
+        response = {"status" : stat_codes,"response" : resp}
+        
+        return response
+            
+            
     
-    def get_html(self):
-        pass
+    def get_htmls(self):
+        self.htmls = {}
+        response = self.make_request()["response"]
+        
+        for pf in response:
+            html = bs4.BeautifulSoup(response[pf],"lxml")
+            self.htmls[pf] = html
+        
+        return self.htmls
     
+    def clean_html_tags(self,obj):
+        """Removes Html tags and returns the output as string"""
         
         
+        for i in range(len(obj)):
+            obj[i] = obj[i].string
+    
+    def get_names(self):
+        names = {}
+        
+        for html in self.htmls:
+            if (html == 'amazon'):
+                name = self.htmls[html].find_all('span',{'class':'a-size-medium a-color-base a-text-normal'})
+                name.extend(self.htmls[html].find_all('span',{'class' : 'a-size-base-plus a-color-base a-text-normal'}))
+                self.clean_html_tags(name)
+                names[html] = name
+            elif (html == 'flipkart'):
+                name = self.htmls[html].find_all('div',{'class':'_4rR01T'})
+                name.extend(self.htmls[html].find_all('a',{'class' : 's1Q9rs'}))
+                self.clean_html_tags(name)
+                names[html] = name
+        
+        return names
+    
+    def get_prices(self):
+        prices = {}
+        
+        for html in self.htmls:
+            if (html == 'amazon'):
+                price = self.htmls[html].find_all('span',{'class':'a-price-whole'})
+                self.clean_html_tags(price)
+                prices[html] = price
+            elif (html == 'flipkart'):
+                price = self.htmls[html].find_all('div',{'class':'_30jeq3'})
+                self.clean_html_tags(price)
+                prices[html] = price
+        
+        return prices
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+p1 = Product("pixel 4")
+
+print(len(Request(p1).get_names()['amazon']))
+
+print()
+print(len(Request(p1).get_prices()['amazon']))
+
+
+
+print(Request(p1).make_request()["status"])
