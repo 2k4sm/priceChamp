@@ -9,16 +9,26 @@ class Product:
         
     
     def amazon_url(self):
-        base_url = f"https://www.amazon.in/s?k={self.product_name}"
+        """
+        Creates amazon url using product name and base url and returns it.
+        """
+        amazon_url = f"https://www.amazon.in/s?k={self.product_name}"
         
-        return base_url
+        return amazon_url
     
     def flipkart_url(self):
-        base_url = f"https://www.flipkart.com/search?q={self.product_name}&marketplace=FLIPKART"
+        """
+        Creates flipkart url using product name and base url and returns it.
+        """
         
-        return base_url
+        flipkart_url = f"https://www.flipkart.com/search?q={self.product_name}&marketplace=FLIPKART"
+        
+        return flipkart_url
     
     def product_urls(self):
+        """
+        returns an dictionary of product urls.
+        """
         urls = {"amazon": self.amazon_url(),"flipkart" : self.flipkart_url()}
         
         return urls
@@ -36,6 +46,9 @@ class Request:
         self.htmls = self.get_htmls()
     
     def make_request(self):
+        """
+        Creates an get request to the product urls and returns the response content along with the status code as an response dictionary.
+        """
         stat_codes = {}
         resp = {}
         
@@ -51,6 +64,9 @@ class Request:
             
     
     def get_htmls(self):
+        """
+        Creates a html object using the response content and returns it.
+        """
         self.htmls = {}
         response = self.make_request()["response"]
         
@@ -68,6 +84,9 @@ class Request:
             obj[i] = obj[i].string
     
     def get_names(self):
+        """
+        Extract the Specified fields using custom css properties and returns the extracted product names as a dictionary of product list.
+        """
         names = {}
         
         for html in self.htmls:
@@ -86,6 +105,9 @@ class Request:
         return names
     
     def get_prices(self):
+        """
+        Extract the Specified fields using custom css properties and returns the extracted product names as a dictionary of product list.
+        """
         prices = {}
         
         for html in self.htmls:
