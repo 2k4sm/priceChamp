@@ -4,6 +4,9 @@ import random
 import prettytable as pt
 
 class Product:
+    """
+    Provides functions for creating product specific search urls.
+    """
     def __init__(self,product_name):
         self.product_name = str(product_name).replace(" ","+")
         
@@ -35,6 +38,10 @@ class Product:
 
 
 class Request:
+    
+    """
+    Provides functions for making request and processing response into useful fields.
+    """
     
     def __init__(self,Product):
         
@@ -126,7 +133,7 @@ class Request:
     
 class Presentation:
     """
-    Contains functions to Present the responsed data in a clean and meaningful presentation
+    Contains functions to Present the respons data in a in a clean and meaningful table.
     """
     
     def status_check():
