@@ -1,6 +1,7 @@
 import requests as rq
 import bs4 as bs4
 import random
+import prettytable as pt
 
 class Product:
     def __init__(self,product_name):
@@ -30,7 +31,6 @@ class Request:
         self.custom_headers_list = [{'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"},
                                     {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"},
                                     {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"},
-                                    {'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-G570Y Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/4.0 Chrome/44.0.2403.133 Mobile Safari/537.36',"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"}
                                     ]
         self.urls = Product.product_urls()
         self.htmls = self.get_htmls()
@@ -40,7 +40,7 @@ class Request:
         resp = {}
         
         for url in self.urls:
-            req = rq.get(self.urls[url],headers = self.custom_headers_list[random.randint(0,3)])
+            req = rq.get(self.urls[url],headers = self.custom_headers_list[random.randint(0,2)])
             resp[url] = req.content
             stat_codes[url] = req.status_code
         
@@ -74,6 +74,7 @@ class Request:
             if (html == 'amazon'):
                 name = self.htmls[html].find_all('span',{'class':'a-size-medium a-color-base a-text-normal'})
                 name.extend(self.htmls[html].find_all('span',{'class' : 'a-size-base-plus a-color-base a-text-normal'}))
+                name = name[:17]
                 self.clean_html_tags(name)
                 names[html] = name
             elif (html == 'flipkart'):
@@ -90,6 +91,7 @@ class Request:
         for html in self.htmls:
             if (html == 'amazon'):
                 price = self.htmls[html].find_all('span',{'class':'a-price-whole'})
+                price = price[:17]
                 self.clean_html_tags(price)
                 prices[html] = price
             elif (html == 'flipkart'):
@@ -100,24 +102,49 @@ class Request:
         return prices
     
     
+class Presentation:
+    """
+    Contains functions to Present the responsed data in a clean and meaningful presentation
+    """
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    def status_check():
+        """
+        Checks the status for scraping of each website.
+        """
+        req_val = Request(p1).make_request()["status"]
+        
+        for val in req_val:
+            print(f"{val} scrapping status: {req_val[val]}")
+        
+    def print_table(product_website):
+        """
+        Uses the get_name and get_prices functions to get the product details and then displays them in a table.
+        """
+        
+        names = Request(p1).get_names()[product_website]
+        prices = Request(p1).get_prices()[product_website]
 
-p1 = Product("pixel 4")
+        table = pt.PrettyTable(align='l')
 
-print(len(Request(p1).get_names()['amazon']))
+        table.field_names = [f"{product_website} Product Name", "Price (INR)"]
 
-print()
-print(len(Request(p1).get_prices()['amazon']))
+        for name, price in zip(names,prices):
+            table.add_row([name, price])
+
+        print(table)
+    
+    
+    
+    
+    
+    
+    
+product_name = str(input("Enter Product name to search for: "))
+
+p1 = Product(product_name)
+Presentation.status_check()
 
 
+Presentation.print_table("flipkart")
+Presentation.print_table("amazon")
 
-print(Request(p1).make_request()["status"])
