@@ -110,6 +110,7 @@ class Request:
             elif (html == 'flipkart'):
                 name = self.htmls[html].find_all('div',{'class':'_4rR01T'})
                 name.extend(self.htmls[html].find_all('a',{'class' : 's1Q9rs'}))
+                name.extend(self.htmls[html].find_all('a',{'class' : 'IRpwTa'}))
                 self.clean_html_tags(name)
                 names[html] = name
         
@@ -126,6 +127,12 @@ class Request:
             if (html == 'amazon'):
                 price = self.htmls[html].find_all('span',{'class':'a-price-whole'})
                 self.clean_html_tags(price)
+                
+                for i in range(len(price)):
+                    if price[i] != None:
+                        price[i] = "₹"+str(price[i])
+                    else:
+                        price[i] = "PNA"
                 prices[html] = price
             elif (html == 'flipkart'):
                 price = self.htmls[html].find_all('div',{'class':'_30jeq3'})
@@ -159,10 +166,11 @@ class Presentation:
 
         table = pt.PrettyTable(align='l')
 
-        table.field_names = [f"{product_website} Product Name", "Price (INR)"]
-
+        table.field_names = ["S.NO",f"{product_website} Product Name", "Price (INR)"]
+        no = 1
         for name, price in zip(names,prices):
-            table.add_row([name, price])
+            table.add_row([no,name, price])
+            no+=1
 
         print(table)
     
