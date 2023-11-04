@@ -15,7 +15,7 @@ class Product:
         """
         Creates amazon url using product name and base url and returns it.
         """
-        amazon_url = f"https://www.amazon.in/s?k={self.product_name}"
+        amazon_url = f"https://www.amazon.in/s?k={self.product_name}&s=relevanceblender&crid=3JW05ZLCX50ZK&qid=1699111544&sprefix=samsung+s%2Caps%2C389&ref=sr_st_relevanceblender&ds=v1%3AUxOdO8ZbYboa8Nhe8dYkWmUAQz1qKXHBhJE3o9YxV%2BY"
         
         return amazon_url
     
@@ -99,12 +99,13 @@ class Request:
         for html in self.htmls:
             name = []
             if (html == 'amazon'):
-                name = self.htmls[html].find_all('span',{'class':'a-size-medium a-color-base a-text-normal'})
-                name.extend(self.htmls[html].find_all('span',{'class' : 'a-size-base-plus a-color-base a-text-normal'}))
+                name = self.htmls[html].select('div.puisg-col-inner span.a-size-medium.a-color-base.a-text-normal')
+                name.extend(self.htmls[html].select('div.puisg-col-inner span.a-size-base-plus.a-color-base.a-text-normal'))
                 self.clean_html_tags(name)
-                
+                # strips extended lines.
                 for i in range(len(name)):
-                    name[i] = name[i][:51]
+                    if len(name[i]) > 50:
+                        name[i] = name[i][:51]+"..."
                     
                 names[html] = name
             elif (html == 'flipkart'):
@@ -125,9 +126,9 @@ class Request:
         for html in self.htmls:
             price = []
             if (html == 'amazon'):
-                price = self.htmls[html].find_all('span',{'class':'a-price-whole'})
+                price = self.htmls[html].select('div.puisg-col-inner span.a-price-whole')
                 self.clean_html_tags(price)
-                
+                # adds ₹ syblom in front of price and for none prices change them to PNA(product not found.)
                 for i in range(len(price)):
                     if price[i] != None:
                         price[i] = "₹"+str(price[i])
@@ -166,7 +167,7 @@ class Presentation:
 
         table = pt.PrettyTable(align='l')
 
-        table.field_names = ["S.NO",f"{product_website} Product Name", "Price (INR)"]
+        table.field_names = ["S.NO",f"                  {product_website} Product Name", "Price (INR)"]
         no = 1
         for name, price in zip(names,prices):
             table.add_row([no,name, price])
