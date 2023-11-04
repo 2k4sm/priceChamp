@@ -97,11 +97,15 @@ class Request:
         names = {}
         
         for html in self.htmls:
+            name = []
             if (html == 'amazon'):
                 name = self.htmls[html].find_all('span',{'class':'a-size-medium a-color-base a-text-normal'})
                 name.extend(self.htmls[html].find_all('span',{'class' : 'a-size-base-plus a-color-base a-text-normal'}))
-                name = name[:17]
                 self.clean_html_tags(name)
+                
+                for i in range(len(name)):
+                    name[i] = name[i][:51]
+                    
                 names[html] = name
             elif (html == 'flipkart'):
                 name = self.htmls[html].find_all('div',{'class':'_4rR01T'})
@@ -118,9 +122,9 @@ class Request:
         prices = {}
         
         for html in self.htmls:
+            price = []
             if (html == 'amazon'):
                 price = self.htmls[html].find_all('span',{'class':'a-price-whole'})
-                price = price[:17]
                 self.clean_html_tags(price)
                 prices[html] = price
             elif (html == 'flipkart'):
@@ -133,7 +137,7 @@ class Request:
     
 class Presentation:
     """
-    Contains functions to Present the respons data in a in a clean and meaningful table.
+    Contains functions to Present the response data in a clean and meaningful table.
     """
     
     def status_check():
@@ -173,7 +177,7 @@ product_name = str(input("Enter Product name to search for: "))
 p1 = Product(product_name)
 Presentation.status_check()
 
-
 Presentation.print_table("flipkart")
 Presentation.print_table("amazon")
+
 
