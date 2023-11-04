@@ -15,7 +15,7 @@ class Product:
         """
         Creates amazon url using product name and base url and returns it.
         """
-        amazon_url = f"https://www.amazon.in/s?k={self.product_name}&s=relevanceblender&crid=3JW05ZLCX50ZK&qid=1699111544&sprefix=samsung+s%2Caps%2C389&ref=sr_st_relevanceblender&ds=v1%3AUxOdO8ZbYboa8Nhe8dYkWmUAQz1qKXHBhJE3o9YxV%2BY"
+        amazon_url = f"https://www.amazon.in/s?k={self.product_name}"
         
         return amazon_url
     
