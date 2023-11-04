@@ -12,8 +12,6 @@ Clone the repository using:
 git clone git@github.com:2k4sm/priceChamp.git
 cd priceChamp
 ```
-
-
 Install required dependencies using:
 
 ```
@@ -21,18 +19,26 @@ pip3 install -r reqs.txt
 ```
 
 To run priceChamp simply do:
-
 - darwin and linux:
 
     ```
     python3 run scrappy.py
     ```
-
 - windows :
 
     ```
     python run scrappy.py
     ```
+
+## How to Use?
+
+- Start the program using `python3 run scrappy.py`
+- Provide the product name as input.
+- Then the program prints the status code if its `200` for both websites then everything is working fine.
+- It presents the scrapped data into tables and prints to the output.
+
+
+
 
 # License
 
