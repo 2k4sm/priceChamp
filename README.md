@@ -37,6 +37,9 @@ To run priceChamp simply do:
 - Then the program prints the status code if its `200` for both websites then everything is working fine.
 - It presents the scrapped data into tables and prints to the output.
 
+# Demo
+![image](https://github.com/2k4sm/priceChamp/assets/101013814/53ddf73f-79a6-48f2-a017-68b9f962a357)
+
 
 
 
