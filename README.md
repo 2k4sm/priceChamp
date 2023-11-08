@@ -30,11 +30,25 @@ To run priceChamp simply do:
     python scrappy.py
     ```
 
+# Testing.
+Test the program by running:
+
+- darwin and linux:
+
+    ```
+    python3 test_scrappy.py
+    ```
+- windows :
+
+    ```
+    python test_scrappy.py
+    ```
+
+
 ## How to Use?
 
 - Start the program using `python3 scrappy.py`
-- Provide the product name as input.
-- Then the program prints the status code if its `200` for both websites then everything is working fine.
+- Provide the product name you want to search as input.
 - It presents the scrapped data into tables and prints to the output.
 
 # Demo

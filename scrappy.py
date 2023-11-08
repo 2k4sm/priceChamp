@@ -148,15 +148,6 @@ class Presentation:
     Contains functions to Present the response data in a clean and meaningful table.
     """
     
-    def status_check():
-        """
-        Checks the status for scraping of each website.
-        """
-        req_val = Request(p1).make_request()["status"]
-        
-        for val in req_val:
-            print(f"{val} scrapping status: {req_val[val]}")
-        
     def print_table(product_website):
         """
         Uses the get_name and get_prices functions to get the product details and then displays them in a table.
@@ -182,7 +173,6 @@ if __name__ == "__main__":
     product_name = str(input("Enter Product name to search for: "))
 
     p1 = Product(product_name)
-    Presentation.status_check()
 
     Presentation.print_table("flipkart")
     Presentation.print_table("amazon")
