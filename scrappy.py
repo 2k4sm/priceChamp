@@ -177,16 +177,14 @@ class Presentation:
     
     
     
-    
-    
-    
-    
-product_name = str(input("Enter Product name to search for: "))
+# Driver Code.
+if __name__ == "__main__":
+    product_name = str(input("Enter Product name to search for: "))
 
-p1 = Product(product_name)
-Presentation.status_check()
+    p1 = Product(product_name)
+    Presentation.status_check()
 
-Presentation.print_table("flipkart")
-Presentation.print_table("amazon")
+    Presentation.print_table("flipkart")
+    Presentation.print_table("amazon")
 
 
