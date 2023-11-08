@@ -26,6 +26,8 @@ class test_scrappy:
                     print(f"Test case {tcount} passed.")
                     tcount+=1
             print(f"Tests Done for Product {p}.")
+            print()
+        print("Automated testing done.")
    
    
 # driver code.
