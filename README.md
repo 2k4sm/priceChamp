@@ -52,7 +52,15 @@ Test the program by running:
 - It presents the scrapped data into tables and prints to the output.
 
 # Demo
-![image](https://github.com/2k4sm/priceChamp/assets/101013814/53ddf73f-79a6-48f2-a017-68b9f962a357)
+`scrappy.py`:
+
+![image](https://github.com/2k4sm/priceChamp/assets/101013814/fb4684f0-e099-4df9-a0e8-49e3536d5387)
+
+`test_scrappy.py`:
+
+![image](https://github.com/2k4sm/priceChamp/assets/101013814/3604a08e-20bb-4c3a-ab44-28b62ba3fbf7)
+
+
 
 
 
